@@ -9,13 +9,11 @@ import {
 import TopicIcon from "@mui/icons-material/Topic";
 import CloseIcon from "@mui/icons-material/Close";
 import ChecklistIcon from "@mui/icons-material/Checklist";
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import DeleteCheckList from "./DeleteCheckList";
 import DisplayCheckListItem from "./DisplayCheckListItem";
 import { createCheckListEP, deleteChecklistEP } from "../../Api";
-
-
 
 function OpenCard({
   cardId,

@@ -10,31 +10,14 @@ import {
   handleArchiveCardEP,
 } from "../../Api";
 import  { useReducer } from 'react';
-// import {checkListReducer  } from "../../../reducer/checkList";
-
-const checkListReducer = (state, action)=>{
-  switch(action.type){
-      case "displayCheckList":
-          return action.payload
-
-      case "addNewCheckList":
-        return [...state, action.payload]
-      
-      case "deleteCheckList":
-        return state.filter((st)=>st.id !== action.payload)
-      default : 
-      return state
-  }
-}
+import { checkListReducer } from "../../reducer/checkListReducer";
 
 
 function DisplayCard({ listId }) {
   const [cards, setCards] = useState();
   const [openStates, setOpenStates] = useState({});
-  // const [checkListData, setCheckListData] = useState([]);
   const [checkListData, dispatch] = useReducer(checkListReducer, [])
 
-  
 
   useEffect(() => {
     displayCardEP(setCards, listId);
