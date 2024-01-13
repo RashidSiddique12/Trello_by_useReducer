@@ -1,12 +1,18 @@
 import axios from "axios";
 
-const ApiToken =
-  "ATTA2e4a2b78cb9848691f329022e06ff42e26efb15646856710f1786d483750eb442629BC3F";
-const ApiKey = "146bb53e7b08a007fbb134f5d5487666";
+const baseUrl = 'https://api.trello.com/1';
+const apiKey = '146bb53e7b08a007fbb134f5d5487666';
+const apiToken = 'ATTA2e4a2b78cb9848691f329022e06ff42e26efb15646856710f1786d483750eb442629BC3F';
+
+axios.defaults.baseURL = baseUrl;
+axios.defaults.params = {
+  key: apiKey,
+  token: apiToken,
+};
 
 export const displayBoardEP = (setData, setIsLoading, setError) => {
   axios(
-    `https://api.trello.com/1/members/me/boards?key=${ApiKey}&token=${ApiToken}`,
+    `/members/me/boards?`,
     {
       method: "GET",
       headers: {
@@ -32,7 +38,7 @@ export const createBoardEP = (
   setNewBoardName
 ) => {
   axios(
-    `https://api.trello.com/1/boards/?name=${newBoardName}&key=${ApiKey}&token=${ApiToken}`,
+    `/boards/?name=${newBoardName}`,
     {
       method: "POST",
     }
@@ -50,7 +56,7 @@ export const createBoardEP = (
 
 export const displayListPageEP = (id,setListData, setIsLoading,setError)=>{
   axios(
-    `https://api.trello.com/1/boards/${id}/lists?key=${ApiKey}&token=${ApiToken}`,
+    `/boards/${id}/lists`,
     {
       method: "GET",
       headers: {
@@ -72,7 +78,7 @@ export const displayListPageEP = (id,setListData, setIsLoading,setError)=>{
 
 export const handleAddlistEP = (newList,boardId ,listData, setListData)=>{
   axios(
-    `https://api.trello.com/1/lists?name=${newList}&idBoard=${boardId}&key=${ApiKey}&token=${ApiToken}`,
+    `/lists?name=${newList}&idBoard=${boardId}`,
     {
       method: "POST",
     }
@@ -91,7 +97,7 @@ export const handleAddlistEP = (newList,boardId ,listData, setListData)=>{
 export const handleArchiveListEP = (listId,setListData, listData ) => {
   axios({
     method: "PUT",
-    url: `https://api.trello.com/1/lists/${listId}/closed?key=${ApiKey}&token=${ApiToken}`,
+    url: `/lists/${listId}/closed?`,
     data: {
       value: true,
     },
@@ -108,7 +114,7 @@ export const handleArchiveListEP = (listId,setListData, listData ) => {
 
 export const displayCardEP = (setCards, listId)=>{
    axios(
-      `https://api.trello.com/1/lists/${listId}/cards?key=${ApiKey}&token=${ApiToken}`
+      `/lists/${listId}/cards?`
     )
       .then((res) => {
         setCards(res.data);
@@ -122,7 +128,7 @@ export const displayCardEP = (setCards, listId)=>{
 export const handleAddCardEP = (listId, newCard, setCards, cards)=>{
   axios({
     method: "POST",
-    url: `https://api.trello.com/1/cards?idList=${listId}&key=${ApiKey}&token=${ApiToken}`,
+    url: `/cards?idList=${listId}`,
     data: {
       name: newCard,
     },
@@ -143,7 +149,7 @@ export const handleAddCardEP = (listId, newCard, setCards, cards)=>{
 
 export const handleArchiveCardEP = (cardId, setCards, cards)=>{
   axios(
-    `https://api.trello.com/1/cards/${cardId}?key=${ApiKey}&token=${ApiToken}`,
+    `/cards/${cardId}?`,
     {
       method: "DELETE",
     }
@@ -160,7 +166,7 @@ export const handleArchiveCardEP = (cardId, setCards, cards)=>{
 
 export const fetchCardDeatailsEP =(cardId)=>{
  return axios(
-    `https://api.trello.com/1/cards/${cardId}/checklists?key=${ApiKey}&token=${ApiToken}`,
+    `/cards/${cardId}/checklists?`,
     {
       method: "GET",
     }
@@ -182,7 +188,7 @@ export const fetchCardDeatailsEP =(cardId)=>{
 export const createCheckListEP = (cardId, newChecklist)=>{
   return axios({
     method: "POST",
-    url: `https://api.trello.com/1/cards/${cardId}/checklists?key=${ApiKey}&token=${ApiToken}`,
+    url: `/cards/${cardId}/checklists?`,
     data: {
       name: newChecklist,
     },
@@ -191,9 +197,7 @@ export const createCheckListEP = (cardId, newChecklist)=>{
     },
   })
     .then((res) => {
-      // console.log(res);
-      // setCheckListData([...checkListData, res.data]);
-      // console.log("added successfully");
+      
       return res.data
     })
     .catch((err) => {
@@ -205,7 +209,7 @@ export const createCheckListEP = (cardId, newChecklist)=>{
 export const deleteChecklistEP = (cardId,checkListId)=>{
   return axios({
     method: "DELETE",
-    url: `https://api.trello.com/1/cards/${cardId}/checklists/${checkListId}?key=${ApiKey}&token=${ApiToken}`,
+    url: `/cards/${cardId}/checklists/${checkListId}?`,
   })
     .then((res) => {
       return;
@@ -218,7 +222,7 @@ export const deleteChecklistEP = (cardId,checkListId)=>{
 
 export const DisplayCheckListItemEP=(id)=>{
   return axios(
-    `https://api.trello.com/1/checklists/${id}/checkItems?key=${ApiKey}&token=${ApiToken}`,
+    `/checklists/${id}/checkItems?`,
     {
       method: "GET",
     }
@@ -234,7 +238,7 @@ export const DisplayCheckListItemEP=(id)=>{
 
 export const handleAddItemEP= (checkListId, newAddItem)=>{
  return axios(
-    `https://api.trello.com/1/checklists/${checkListId}/checkItems?name=${newAddItem}&key=${ApiKey}&token=${ApiToken}`,
+    `/checklists/${checkListId}/checkItems?name=${newAddItem}&`,
     {
       method: "POST",
     }
@@ -251,7 +255,7 @@ export const handleAddItemEP= (checkListId, newAddItem)=>{
 
 export const DeleteCheckItemEP = (checkListId, checkItemsId)=>{
  return axios(
-      `https://api.trello.com/1/checklists/${checkListId}/checkItems/${checkItemsId}?key=${ApiKey}&token=${ApiToken}`,
+      `https://api.trello.com/1/checklists/${checkListId}/checkItems/${checkItemsId}`,
       {
         method: "DELETE",
       }
@@ -265,26 +269,16 @@ export const DeleteCheckItemEP = (checkListId, checkItemsId)=>{
       });
 }
 
-export const handleCheckBoxEP = (cardId,checkItemId,checkItemstate)=>{
-  return axios(
-    `
-      https://api.trello.com/1/cards/${cardId}/checkItem/${checkItemId}?key=${ApiKey}&token=${ApiToken}&state=${checkItemstate}`,
-    {
-      method: "PUT",
-    }
-  )
+export const handleCheckBoxEP = (cardId, checkItemId, checkItemstate) => {
+
+  return axios.put(`/cards/${cardId}/checkItem/${checkItemId}`, {
+    state: checkItemstate,
+  })
     .then((res) => {
-      return;
-      // setChekItems(checkItems.map((checkItem)=>{
-      //   if(checkItem.id === checkItemId){
-      //     return {...checkItem, state: checkItemstate}
-      //   }
-      //   else{
-      //     return checkItem;
-      //   }
-      // }))
+      return res.data.id;
     })
     .catch((err) => {
+      console.error("API Request Error:", err);
       alert("Internal Error");
     });
-}
+};
