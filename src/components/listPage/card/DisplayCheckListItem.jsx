@@ -6,17 +6,22 @@ import { DisplayCheckListItemEP, handleCheckBoxEP } from "../../Api";
 import { BorderLinearProgress } from "./ProgressLine";
 import { checkListItemReducer } from "../../reducer/checkListItemReducer";
 
+const intialState = {
+  checkItems: [],
+  newAddItem: "",
+};
+
 function DisplayCheckListItem({ id, cardId }) {
-  const [checkItems, dispatch] = useReducer(checkListItemReducer, []);
+  const [state, dispatch] = useReducer(checkListItemReducer, intialState);
+  const { checkItems } = state;
   const [progress, setProgress] = useState(0);
 
   const fetchData = async () => {
-      const itemData = await DisplayCheckListItemEP(id);
-      dispatch({
-        type: "displayCheckListItem",
-        payload: itemData,
-      });
-    
+    const itemData = await DisplayCheckListItemEP(id);
+    dispatch({
+      type: "displayCheckListItem",
+      payload: itemData,
+    });
   };
 
   useEffect(() => {
@@ -30,7 +35,7 @@ function DisplayCheckListItem({ id, cardId }) {
 
   const handleCheckBox = async (checkItemId, state) => {
     const checkItemstate = state === "complete" ? "incomplete" : "complete";
-    const itemId =  await handleCheckBoxEP(cardId, checkItemId, checkItemstate);
+    const itemId = await handleCheckBoxEP(cardId, checkItemId, checkItemstate);
     dispatch({
       type: "handleCheckBox",
       payload: { checkItemId: itemId, checkItemstate: checkItemstate },
@@ -65,7 +70,7 @@ function DisplayCheckListItem({ id, cardId }) {
           />
         </div>
       ))}
-      <AddItem checkListId={id} dispatch={dispatch} />
+      <AddItem checkListId={id} state={state} dispatch={dispatch} />
     </div>
   );
 }

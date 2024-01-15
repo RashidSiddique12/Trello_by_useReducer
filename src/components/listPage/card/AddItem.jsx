@@ -3,24 +3,21 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { handleAddItemEP } from "../../Api";
 
-
-
-function AddItem({ checkListId,dispatch }) {
+// eslint-disable-next-line react/prop-types
+function AddItem({ checkListId, state, dispatch }) {
   const [add, setAdd] = useState(false);
-  const [newAddItem, setNewAddItem] = useState();
 
-  // console.log("tttttttt", checkListId);
+  const { newAddItem } = state;
 
-  const handleAddItem = async(e) => {
+  const handleAddItem = async (e) => {
     e.preventDefault();
     if (newAddItem !== "") {
       const newItem = await handleAddItemEP(checkListId, newAddItem);
       dispatch({
         type: "addNewItem",
-        payload : newItem
-      })
+        payload: newItem,
+      });
 
-      setNewAddItem("");
     }
   };
 
@@ -32,7 +29,10 @@ function AddItem({ checkListId,dispatch }) {
             type="text"
             placeholder="Enter the title of a card"
             value={newAddItem}
-            onChange={(e) => setNewAddItem(e.target.value)}
+            onChange={(e) => dispatch({
+              type : "newItem",
+              payload : e.target.value
+            })}
           />
           <br />
           <br />

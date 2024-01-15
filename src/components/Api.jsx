@@ -212,7 +212,7 @@ export const deleteChecklistEP = (cardId,checkListId)=>{
     url: `/cards/${cardId}/checklists/${checkListId}?`,
   })
     .then((res) => {
-      return;
+      return res;
     })
     .catch((err) => {
       console.log(err);
@@ -255,13 +255,13 @@ export const handleAddItemEP= (checkListId, newAddItem)=>{
 
 export const DeleteCheckItemEP = (checkListId, checkItemsId)=>{
  return axios(
-      `https://api.trello.com/1/checklists/${checkListId}/checkItems/${checkItemsId}`,
+      `/checklists/${checkListId}/checkItems/${checkItemsId}`,
       {
         method: "DELETE",
       }
     )
-      .then(() => {
-        return;
+      .then((res) => {
+        return res;
       })
       .catch((err) => {
         console.log(err);

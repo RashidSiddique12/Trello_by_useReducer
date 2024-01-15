@@ -13,13 +13,16 @@ function DeleteItem({ checkItemsId, checkListId, dispatch }) {
   };
   const open = Boolean(anchorEl);
 
-  const DeleteCheckItem = async() => {
-    await DeleteCheckItemEP(checkListId, checkItemsId);
-    dispatch({
-      type : "deleteItem",
-      payload : checkItemsId
-    })
+  const DeleteCheckItem = async () => {
+    const res = await DeleteCheckItemEP(checkListId, checkItemsId);
+    // console.log("deletecheckitem : ", res)
 
+    if (res.status === 200) {
+      dispatch({
+        type: "deleteItem",
+        payload: checkItemsId,
+      });
+    }
   };
   return (
     <div>

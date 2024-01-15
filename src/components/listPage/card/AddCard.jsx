@@ -6,7 +6,7 @@ import { handleAddCardEP } from "../../Api";
 
 function AddCard({ listId, cards, setCards }) {
   const [openTextField, setOpenTextField] = useState(false);
-  const [newCard, setNewCard] = useState();
+  const [newCard, setNewCard] = useState("");
 
   const handleAddCard = (e) => {
     e.preventDefault();

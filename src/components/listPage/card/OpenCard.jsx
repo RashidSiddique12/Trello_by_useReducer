@@ -15,17 +15,13 @@ import DeleteCheckList from "./DeleteCheckList";
 import DisplayCheckListItem from "./DisplayCheckListItem";
 import { createCheckListEP, deleteChecklistEP } from "../../Api";
 
-function OpenCard({
-  cardId,
-  handleClose,
-  checkListData,
-  dispatch,
-  CardName,
-}) {
+// eslint-disable-next-line react/prop-types
+function OpenCard({ cardId, handleClose, state, dispatch, CardName }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [newChecklist, setNewCheckList] = useState("");
-  // console.log(checkListData);
-  
+
+  // eslint-disable-next-line react/prop-types
+  const { checkListData, newChecklist } = state;
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -34,30 +30,29 @@ function OpenCard({
     setAnchorEl(null);
   };
 
-  const createCheckList = async(e) => {
+  const createCheckList = async (e) => {
     e.preventDefault();
     if (newChecklist !== "") {
       const newCheckListData = await createCheckListEP(cardId, newChecklist);
       dispatch({
-        type :"addNewCheckList",
-        payload : newCheckListData
-      })
-
-      setNewCheckList("");
+        type: "addNewCheckList",
+        payload: newCheckListData,
+      });
     }
   };
-  const deleteChecklist = async(checkListId) => {
-    await deleteChecklistEP(cardId,checkListId);
-    dispatch({
-      type : "deleteCheckList",
-      payload : checkListId
-    })
-
+  const deleteChecklist = async (checkListId) => {
+    const res = await deleteChecklistEP(cardId, checkListId);
+    if (res.status === 200) {
+      dispatch({
+        type: "deleteCheckList",
+        payload: checkListId,
+      });
+    }
   };
   const open = Boolean(anchorEl);
   const isopen = open ? "simple-popover" : undefined;
   return (
-    <div >
+    <div>
       <div className="openCardTitle">
         <Typography variant="h5">
           <TopicIcon sx={{ paddingRight: "1rem" }} />
@@ -66,7 +61,7 @@ function OpenCard({
         <CloseIcon onClick={handleClose} />
       </div>
       <div className="openCardBody">
-        <div className="left" >
+        <div className="left">
           <Typography>
             {/* <ChecklistIcon sx={{ paddingRight: "1rem" }} /> */}
             CheckList Items
@@ -86,11 +81,8 @@ function OpenCard({
                       id={id}
                     />
                   </div>
-                  <div className="progress"> 
-                   
-                  </div>
-                  <DisplayCheckListItem id={id} cardId={cardId} 
-                   />
+                  <div className="progress"></div>
+                  <DisplayCheckListItem id={id} cardId={cardId} />
                 </Card>
               );
             })}
@@ -108,9 +100,7 @@ function OpenCard({
                 cursor: "pointer",
               }}
             >
-              <ChecklistIcon
-                sx={{padding:"0.5rem 0.5rem 0 1rem" }}
-              />
+              <ChecklistIcon sx={{ padding: "0.5rem 0.5rem 0 1rem" }} />
               <CardActions>
                 <Typography>CheckList</Typography>
               </CardActions>
@@ -132,7 +122,12 @@ function OpenCard({
                       type="text"
                       placeholder="Enter the title of a card"
                       value={newChecklist}
-                      onChange={(e) => setNewCheckList(e.target.value)}
+                      onChange={(e) =>
+                        dispatch({
+                          type: "NewChecklist",
+                          payload: e.target.value,
+                        })
+                      }
                     />
                     <br />
                     <br />

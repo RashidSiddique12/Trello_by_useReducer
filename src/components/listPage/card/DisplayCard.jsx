@@ -1,5 +1,4 @@
-import { Backdrop, Box, Card, Fade, Modal, Typography } from "@mui/material";
-import axios from "axios";
+import {  Box, Card, Modal} from "@mui/material";
 import { useEffect, useState } from "react";
 import AddCard from "./AddCard";
 import EditCard from "./EditCard";
@@ -12,11 +11,16 @@ import {
 import  { useReducer } from 'react';
 import { checkListReducer } from "../../reducer/checkListReducer";
 
+const initialState={
+  checkListData:[],
+  newChecklist:""
+}
 
 function DisplayCard({ listId }) {
-  const [cards, setCards] = useState();
+  const [cards, setCards] = useState("");
   const [openStates, setOpenStates] = useState({});
-  const [checkListData, dispatch] = useReducer(checkListReducer, [])
+  const [state, dispatch] = useReducer(checkListReducer, initialState)
+
 
 
   useEffect(() => {
@@ -29,10 +33,12 @@ function DisplayCard({ listId }) {
 
   const handleOpen = async(cardId) => {
     const data = await fetchCardDeatailsEP(cardId);
+    
     dispatch({
     type : "displayCheckList",
     payload : data
    })
+
     setOpenStates((prevOpenStates) => ({
       ...prevOpenStates,
       [cardId]: true,
@@ -73,7 +79,7 @@ function DisplayCard({ listId }) {
               <Box sx={style}>
                 <OpenCard
                   handleClose={() => handleClose(id)}
-                  checkListData={checkListData}
+                  state={state}
                   dispatch= {dispatch}
                   cardId={id}
                   CardName={name}
